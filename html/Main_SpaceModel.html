@@ -1,0 +1,329 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Main_SpaceModel</title><meta name="generator" content="MATLAB 9.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2025-08-05"><meta name="DC.source" content="Main_SpaceModel.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">| Data loading |</a></li><li><a href="#2">Loops for params and Background Rate </a></li><li><a href="#3">Basic Plotting </a></li><li><a href="#4">Declustering Procedure  </a></li><li><a href="#5">Background Rate Grids </a></li><li><a href="#6">| Mapping Background Rate |</a></li><li><a href="#7">Residual Analysis </a></li><li><a href="#8">| Simulate loading |</a></li><li><a href="#9">Reconstruct Background Events </a></li><li><a href="#10">Drawing      </a></li><li><a href="#11">Writing In Catalog </a></li><li><a href="#12">Forecasting Procedure loading </a></li><li><a href="#13">| Forecasting Mapping |</a></li><li><a href="#14">Some debates (Backevents) </a></li></ul></div><h2 id="1">| Data loading |</h2><pre class="codeinput">                          Space_GlobalHandel;
+</pre><pre class="codeoutput">Data have been prepared and try next step 
+
+||  ===============================================  ||
+||  Total 2000 events                                ||
+||  While 1712 events in the selected region         ||
+||  And 288 events out of region                     ||
+
+||  ===============================================  ||
+</pre><img vspace="5" hspace="5" src="Main_SpaceModel_01.png" alt=""> <h2 id="2">Loops for params and Background Rate </h2><pre class="codeinput">param0=[ 1   0.04   1.8   0.1   1.8   0.015   1.8   0.8];
+
+<span class="comment">% [paramNew,RateNew,Fai,AICNew]=Space_ETASModel(param0,'finite');</span>
+</pre><h2 id="3">Basic Plotting </h2><pre class="codeinput">[Lamda]=Space_CLam(RateNew, paramNew);
+
+Space_TimeSequenceMapping(paramNew,Fai,RateNew,Lamda);
+</pre><img vspace="5" hspace="5" src="Main_SpaceModel_02.png" alt=""> <img vspace="5" hspace="5" src="Main_SpaceModel_03.png" alt=""> <h2 id="4">Declustering Procedure  </h2><pre class="codeinput">[ind,rij]= Space_Decluster(RateNew, paramNew);
+[bkgd,trig]=Space_Trig_bkgd(RateNew, paramNew,Fai);
+
+Space_DeclusterMapping(ind,Fai);
+</pre><pre class="codeoutput">There are 1096 events in Background 
+There are 904 events Triggered 
+ 
+</pre><img vspace="5" hspace="5" src="Main_SpaceModel_04.png" alt=""> <h2 id="5">Background Rate Grids </h2><pre class="codeinput">[BackRate]=Space_OutBackRate(paramNew,Fai);
+[TrigRate]=Space_OutTrigRate(paramNew,Fai);
+</pre><pre class="codeoutput">&#21382;&#26102; 1.003089 &#31186;&#12290;
+&#21382;&#26102; 1.002193 &#31186;&#12290;
+</pre><h2 id="6">| Mapping Background Rate |</h2><pre class="codeinput">close <span class="string">all</span>;
+Space_OutputMapping(BackRate,TrigRate,<span class="string">'eclipse'</span>);
+</pre><img vspace="5" hspace="5" src="Main_SpaceModel_05.png" alt=""> <img vspace="5" hspace="5" src="Main_SpaceModel_06.png" alt=""> <img vspace="5" hspace="5" src="Main_SpaceModel_07.png" alt=""> <img vspace="5" hspace="5" src="Main_SpaceModel_08.png" alt=""> <h2 id="7">Residual Analysis </h2><pre class="codeinput">TransN=bkgd+trig;
+Space_RPP(TransN)
+</pre><img vspace="5" hspace="5" src="Main_SpaceModel_09.png" alt=""> <h2 id="8">| Simulate loading |</h2><pre class="codeinput"><span class="comment">%=                                                                        =</span>
+<span class="comment">%=                                                                        =</span>
+<span class="comment">%=                                                                        =</span>
+<span class="comment">%=                                                                        =</span>
+<span class="comment">% Params:[mu,A,alpha,c,p,D,q,gamma]</span>
+<span class="comment">% paramNew=[1.1882     0.16229      1.6852    0.038814  ...</span>
+<span class="comment">%        1.1642   0.0022916      1.8805      1.0853];</span>
+<span class="comment">%===========================================</span>
+</pre><h2 id="9">Reconstruct Background Events </h2><pre class="codeinput">Foretime=60;
+<span class="comment">% predicted timespan (Means we use T.[tstart tend] and predict more)</span>
+clc;
+Region=<span class="string">'all'</span>;
+<span class="comment">% Region='select';</span>
+[Incat] = Space_SimulateBkgd(Foretime,Fai,paramNew,Region);
+
+<span class="comment">%                   | Reconstruct the sequence of Aftershocks |</span>
+[Loopcata]=Space_SimulateTrigLoop(Foretime,paramNew,Incat,Region);
+</pre><pre class="codeoutput">After selected in the catalog :
+There are 15 background events
+
+======== Background events is finished ========
+b-value is 0.80
+The Group Maxmag= 6.29 
+Triggering Ability is= 1.60 
+After triggered in the catalog :
+There is 24 number of triggering events 
+Further : 
+While there are 17 events in the time spans
+Further : 
+While there are 17 events in the Area strictly
+
+
+b-value is 0.80
+The Group Maxmag= 5.89 
+Triggering Ability is= 0.35 
+After triggered in the catalog :
+There is 6 number of triggering events 
+Further : 
+While there are 4 events in the time spans
+Further : 
+While there are 4 events in the Area strictly
+
+
+b-value is 0.80
+The Group Maxmag= 4.97 
+Triggering Ability is= 0.50 
+After triggered in the catalog :
+There is 2 number of triggering events 
+Further : 
+While there are 2 events in the time spans
+Further : 
+While there are 2 events in the Area strictly
+
+
+b-value is 0.80
+The Group Maxmag= 4.72 
+Triggering Ability is= 0.50 
+After triggered in the catalog :
+There is 1 number of triggering events 
+Further : 
+While there are 1 events in the time spans
+Further : 
+While there are 1 events in the Area strictly
+
+
+b-value is 0.80
+========= Triggered events is finished =========
+Both loop 4 generations 
+And Create 24 events 
+=========    Loading is finished =========
+</pre><h2 id="10">Drawing      </h2><pre class="codeinput">Space_SimulateMapping(Incat,Loopcata)
+</pre><pre class="codeoutput">If there are events which Mags larger than Initial Catalog; they will be plotted
+</pre><img vspace="5" hspace="5" src="Main_SpaceModel_10.png" alt=""> <img vspace="5" hspace="5" src="Main_SpaceModel_11.png" alt=""> <img vspace="5" hspace="5" src="Main_SpaceModel_12.png" alt=""> <img vspace="5" hspace="5" src="Main_SpaceModel_13.png" alt=""> <h2 id="11">Writing In Catalog </h2><pre class="codeinput">[T1,T2,T3]=Space_SimulateWriteIn(Incat,Loopcata);
+</pre><h2 id="12">Forecasting Procedure loading </h2><pre class="codeinput">Foretime=60;
+Nsmp=5e3;
+Sample=Space_SimulateForecast(Nsmp,Foretime,Fai,paramNew,Region);
+</pre><pre class="codeoutput">Forecasting Procedure is starting, wait a moment 
+
+ &gt;&gt;&gt; 100 / 5000  
+ &gt;&gt;&gt; 200 / 5000  
+ &gt;&gt;&gt; 300 / 5000  
+ &gt;&gt;&gt; 400 / 5000  
+ &gt;&gt;&gt; 500 / 5000  
+ &gt;&gt;&gt; 600 / 5000  
+ &gt;&gt;&gt; 700 / 5000  
+ &gt;&gt;&gt; 800 / 5000  
+ &gt;&gt;&gt; 900 / 5000  
+ &gt;&gt;&gt; 1000 / 5000  
+ &gt;&gt;&gt; 1100 / 5000  
+ &gt;&gt;&gt; 1200 / 5000  
+ &gt;&gt;&gt; 1300 / 5000  
+ &gt;&gt;&gt; 1400 / 5000  
+ &gt;&gt;&gt; 1500 / 5000  
+ &gt;&gt;&gt; 1600 / 5000  
+ &gt;&gt;&gt; 1700 / 5000  
+ &gt;&gt;&gt; 1800 / 5000  
+ &gt;&gt;&gt; 1900 / 5000  
+ &gt;&gt;&gt; 2000 / 5000  
+ &gt;&gt;&gt; 2100 / 5000  
+ &gt;&gt;&gt; 2200 / 5000  
+ &gt;&gt;&gt; 2300 / 5000  
+ &gt;&gt;&gt; 2400 / 5000  
+ &gt;&gt;&gt; 2500 / 5000  
+ &gt;&gt;&gt; 2600 / 5000  
+ &gt;&gt;&gt; 2700 / 5000  
+ &gt;&gt;&gt; 2800 / 5000  
+ &gt;&gt;&gt; 2900 / 5000  
+ &gt;&gt;&gt; 3000 / 5000  
+ &gt;&gt;&gt; 3100 / 5000  
+ &gt;&gt;&gt; 3200 / 5000  
+ &gt;&gt;&gt; 3300 / 5000  
+ &gt;&gt;&gt; 3400 / 5000  
+ &gt;&gt;&gt; 3500 / 5000  
+ &gt;&gt;&gt; 3600 / 5000  
+ &gt;&gt;&gt; 3700 / 5000  
+ &gt;&gt;&gt; 3800 / 5000  
+ &gt;&gt;&gt; 3900 / 5000  
+ &gt;&gt;&gt; 4000 / 5000  
+ &gt;&gt;&gt; 4100 / 5000  
+ &gt;&gt;&gt; 4200 / 5000  
+ &gt;&gt;&gt; 4300 / 5000  
+ &gt;&gt;&gt; 4400 / 5000  
+ &gt;&gt;&gt; 4500 / 5000  
+ &gt;&gt;&gt; 4600 / 5000  
+ &gt;&gt;&gt; 4700 / 5000  
+ &gt;&gt;&gt; 4800 / 5000  
+ &gt;&gt;&gt; 4900 / 5000  
+ &gt;&gt;&gt; 5000 / 5000  
+&#21382;&#26102; 6.787372 &#31186;&#12290;
+================ Ending =================
+</pre><h2 id="13">| Forecasting Mapping |</h2><pre class="codeinput">Space_SimulateForecastMapping(Nsmp,Sample(:,3),Foretime)
+</pre><pre class="codeoutput">In 60.00 Time-span with 5000 Samples, obtained: 
+Mean= 29.1
+std= 12.4
+
+By using Histcouts Events= 24
+By using kernel estimation Events= 23
+Finally the Number Expectation=29.05 
+Finally the Occurrence Expectation=100.00 %
+=================================================
+</pre><img vspace="5" hspace="5" src="Main_SpaceModel_14.png" alt=""> <img vspace="5" hspace="5" src="Main_SpaceModel_15.png" alt=""> <h2 id="14">Some debates (Backevents) </h2><pre class="codeinput">Space_Simulate_TrigAbility(Foretime,paramNew,Incat,Region)
+</pre><pre class="codeoutput">Followed Poisson Process, Triggered :1323 events 
+Theoretical there are :1313.05 events 
+And Finally After the selecting of Time and Area, Actually we get :18 events 
+</pre><img vspace="5" hspace="5" src="Main_SpaceModel_16.png" alt=""> <img vspace="5" hspace="5" src="Main_SpaceModel_17.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%                       ||| Data loading ||| 
+                          Space_GlobalHandel;
+
+
+%%             || Loops for params and Background Rate ||
+param0=[ 1   0.04   1.8   0.1   1.8   0.015   1.8   0.8];
+
+% [paramNew,RateNew,Fai,AICNew]=Space_ETASModel(param0,'finite');
+%%                      || Basic Plotting ||
+[Lamda]=Space_CLam(RateNew, paramNew);
+
+Space_TimeSequenceMapping(paramNew,Fai,RateNew,Lamda);
+
+
+%%                   || Declustering Procedure  ||
+[ind,rij]= Space_Decluster(RateNew, paramNew);
+[bkgd,trig]=Space_Trig_bkgd(RateNew, paramNew,Fai);
+
+Space_DeclusterMapping(ind,Fai);
+
+
+%%                     ||  Background Rate Grids ||
+
+[BackRate]=Space_OutBackRate(paramNew,Fai);
+[TrigRate]=Space_OutTrigRate(paramNew,Fai);
+
+
+%%                      | Mapping Background Rate |
+close all;
+Space_OutputMapping(BackRate,TrigRate,'eclipse');
+
+
+%%                        || Residual Analysis ||
+TransN=bkgd+trig;
+Space_RPP(TransN)
+%%                        ||| Simulate loading |||
+%=                                                                        =
+%=                                                                        =
+%=                                                                        =
+%=                                                                        =
+% Params:[mu,A,alpha,c,p,D,q,gamma]
+% paramNew=[1.1882     0.16229      1.6852    0.038814  ...
+%        1.1642   0.0022916      1.8805      1.0853];
+%===========================================
+
+
+%%                     || Reconstruct Background Events ||
+Foretime=60; 
+% predicted timespan (Means we use T.[tstart tend] and predict more)
+clc;
+Region='all';
+% Region='select';
+[Incat] = Space_SimulateBkgd(Foretime,Fai,paramNew,Region);
+
+%                   | Reconstruct the sequence of Aftershocks |
+[Loopcata]=Space_SimulateTrigLoop(Foretime,paramNew,Incat,Region);
+
+
+%%                       ||      Drawing      ||
+Space_SimulateMapping(Incat,Loopcata)
+
+
+%%                      || Writing In Catalog ||
+[T1,T2,T3]=Space_SimulateWriteIn(Incat,Loopcata);
+
+
+%%                  || Forecasting Procedure loading ||
+Foretime=60;
+Nsmp=5e3;
+Sample=Space_SimulateForecast(Nsmp,Foretime,Fai,paramNew,Region);
+%%                      | Forecasting Mapping | 
+Space_SimulateForecastMapping(Nsmp,Sample(:,3),Foretime)
+
+
+%%                   || Some debates (Backevents) ||
+
+Space_Simulate_TrigAbility(Foretime,paramNew,Incat,Region)
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>
